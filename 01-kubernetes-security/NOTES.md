@@ -1,5 +1,18 @@
 # Kubernetes Security
 
+
+### Preparation
+
+* login to Github
+* visit repo [home](https://github.com/mkol5222/training-cnapp-p-prague)
+* open Codespace on this repo - green button `Code` / Codespaces tab / create new with `+` button
+* use VScode in web page or consider opening in local VScode app
+
+![new codespace](./img/new-codespace.png)
+
+* Codespace is dedicated Linux machine
+* this is how you introduce Kubernetes cluster on it with commands:
+
 ```shell
 # make our cluster
 minikube start --driver docker
@@ -59,6 +72,18 @@ Finish.
 
 ![K8S done](./img/k8s-done.png)
 
+
+# Image scan
+```shell
+# to get scan result we have selected old version of NGINX image from 2016: https://hub.docker.com/layers/library/nginx/1.11.7-alpine/images/sha256-78e07921f4ab58e6eff8e5c390c90d96de112feab23c284523371c155478ccd6?context=explore
+
+# lets give platform chance to scan it before we return to details later
+# notice pods are started in default namespace
+kubectl create deploy web --image nginx:1.11.7-alpine
+# we will revisit this later
+```
+
+# Admission control
 
 ```shell
 # optional - monitor when new Admission policy is fetched - hash will change
