@@ -58,3 +58,29 @@ Next.
 Finish.
 
 ![K8S done](./img/k8s-done.png)
+
+
+```shell
+# optional - monitor when new Admission policy is fetched - hash will change
+ watch -d 'kubectl -n checkpoint logs deployment.apps/asset-mgmt-admission-policy | grep Hash | tail -4'
+
+# create enforced ns web and not limited ns freedom
+kubectl create ns web
+kubectl create ns freedom
+
+# in freedom - deployment is finished
+kubectl create deploy web -n freedom --image nginx:1.11.7-alpine
+kubectl get po -n freedom --watch
+# optional - delete deployment
+kubectl delete -n freedom deploy/web
+
+# what if we try in enforced NS web?
+kubectl create deploy web -n web --image nginx:1.11.7-alpine
+# ERROR
+# error: failed to create deployment: admission webhook "cloudguard-enforcer-webhook.cloudguard.checkpoint.com" denied the request: [CloudGuard] The request has been blocked according to the GSL rule: 'web Chain of Trust Protection – Images must be deployed from a pre-defined list of registries'
+
+# check NS
+kubectl get all -n web
+# No resources found in web namespace.
+```
+
