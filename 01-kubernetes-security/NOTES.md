@@ -77,13 +77,26 @@ Finish.
 ```shell
 # to get scan result we have selected old version of NGINX image from 2016: https://hub.docker.com/layers/library/nginx/1.11.7-alpine/images/sha256-78e07921f4ab58e6eff8e5c390c90d96de112feab23c284523371c155478ccd6?context=explore
 
-# lets give platform chance to scan it before we return to details later
-# notice pods are started in default namespace
+# Lets give platform chance to scan it before we return to details later
+# Notice pods are started in default namespace
 kubectl create deploy web --image nginx:1.11.7-alpine
 # we will revisit this later
 ```
 
 # Admission control
+
+While Posture Management is scanning existing configuration, Admission Control enables Kubernetes to consult security of every single action - meaning every single API call regadless tool making the call, both manual and automated, both command line and GUI.
+
+There is default Admission contol rule set in Detect. We will add specific ruleset to limit source of images in namespace `web`. Look at rulesets in [Admission control section](https://portal.checkpoint.com/dashboard/cloudguard#/runtime-assurance) and inspect [ruleset](https://portal.checkpoint.com/dashboard/cloudguard#/runtime-assurance/ruleset/47563) `web-chain-of-trust`:
+
+![chain of trust ruleset](./img/chain-of-trust-rule.png)
+
+We have to visit Admission Control [Policies section](https://portal.checkpoint.com/dashboard/cloudguard#/runtime-assurance/policies) and add it for your environment - e.g. `dec10-green` in `Prevent`:
+
+Add policy / per environment. Choose your environment and ruleset `web-chain-of-trust` in `Prevention Mode` with default notification delivery `CloudGuard Notification`:
+![admission prevent](./img/admission-prevent.png)
+
+Policy is fetched by agent every minute - it can be monitored by change of policy hash. Be patient and continue once policy was fetched within next 2 minutes:
 
 ```shell
 # optional - monitor when new Admission policy is fetched - hash will change
@@ -109,3 +122,10 @@ kubectl get all -n web
 # No resources found in web namespace.
 ```
 
+### Summary
+
+Summary: while other namespaces allow to deploy nginx from Docker Hub, policy that only our own repository is allowed is enforced for namespace `web` as specified in GSL code of our rulebase.
+
+There is log in All Events for source `Admission Control` that documents our attempt:
+
+![admission-event](./img/admission-event.png)
