@@ -48,3 +48,16 @@ $HOME/.spectral/spectral scan --ok --engines secrets,iac,oss --include-tags base
 ```
 
 ### Results in console
+
+Findings are presented in [Code Security section](https://portal.checkpoint.com/dashboard/cloudguard#/shiftleft-redirect) under Assets:
+
+![alt text](./img/assets.png)
+
+Look under each category: Secrets, IaC and Open Source.
+Notice that secrets are not harvested into security tool database, but finding includes link to source code specific line to verify incident.
+
+![alt text](./img/findings.png)
+
+Source code reference:
+
+![alt text](./img/src.png)
