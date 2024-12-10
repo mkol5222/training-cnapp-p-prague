@@ -29,7 +29,7 @@ Select `Sources` and use instructions for `Other CI Systems` that will guide us 
 
 * first we enable `Audit` level and choose all engines including `Infrastructire as code` and `Open source packages` (CVEs from code supply chain)
 
-![alt text](./img/comnmands.png)
+![alt text](./img/commands.png)
 
 * next we download command line scanner and set credentials enabling scans:
 
@@ -47,7 +47,7 @@ export SPECTRAL_DSN=https://spu-BringYourOwn@spectral-eu.checkpoint.com
 $HOME/.spectral/spectral scan --ok --engines secrets,iac,oss --include-tags base,audit3,iac
 ```
 
-### Results in console
+### Results in (CNAPP) management console
 
 Findings are presented in [Code Security section](https://portal.checkpoint.com/dashboard/cloudguard#/shiftleft-redirect) under Assets:
 
